@@ -149,7 +149,7 @@ export default function CameraView() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "#FFFFFF",
+      backgroundColor: "#000",
       justifyContent: "center",
       paddingBottom: 20,
     },

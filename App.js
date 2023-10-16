@@ -1,74 +1,55 @@
-import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
-import Button from "./src/components/Button";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import Form from "./src/components/Form";
-
+import ProductName from "./src/components/ProductName";
+import PersonalDetails from "./src/components/PersonalDetails";
+import CameraView from "./src/components/CameraView";
 
 export default function App() {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [displayCameraView, setDisplayCameraView] = useState(false);
-  const [image, setImage] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
-  const cameraRef = useRef(null);
+  const [formData, setFormData] = useState({
+    //Product Name
+    name: "",
 
-  /* useEffect(() => {
-    (async () => {
-      MediaLibrary.requestPermissionsAsync();
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === "granted");
-    })();
-  }, []); */
-
-  const getPermissions = async () => {
-    MediaLibrary.requestPermissionsAsync();
-    const cameraStatus = await Camera.requestCameraPermissionsAsync();
-    setHasCameraPermission(cameraStatus.status === "granted");
+    //Product Quantity
+    age: "age",
+    designation: "",
+    company: "",
+  });
+  const [screen, setScreen] = useState(0);
+  const FormTitle = ["Nome Prodotto", "Quantità"];
+  const ScreenDisplay = () => {
+    if (screen === 0) {
+      return <ProductName formData={formData} setFormData={setFormData} />;
+    } else if (screen === 1) {
+      return <PersonalDetails formData={formData} setFormData={setFormData} />;
+    } 
   };
-
-  const displayCamera = async () => {
-    try {
-      const permission = await getPermissions();
-      setDisplayCameraView(true);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const takePicture = async () => {
-    if (cameraRef) {
-      try {
-        const data = await cameraRef.current.takePictureAsync();
-        console.log(data);
-        setImage(data.uri);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  };
-
-  const saveImage = async () => {
-    if (image) {
-      try {
-        await MediaLibrary.createAssetAsync(image);
-        alert("Picture save!");
-        setImage(null);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  };
-
-  if (hasCameraPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
 
   return (
     <View style={styles.container}>
-      <Text>Multi Step Form</Text>
-      <Form></Form>
+      <Text style={styles.title}>REGISTRA IL TUO PRODOTTO</Text>
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>{FormTitle[screen]}</Text>
+        {screen === 2 ? (
+          <CameraView />
+        ) : (
+          <View style={styles.form}>
+            <View>{ScreenDisplay()}</View>
+            <View style={styles.buttonContainer}>
+              <Pressable
+                disabled={screen === 0}
+                onPress={() => setScreen(currScreen => currScreen - 1)}>
+                <Text style={styles.button}>Prev</Text>
+              </Pressable>
+              <Pressable
+                disabled={screen === 2}
+                onPress={() => setScreen(currScreen => currScreen + 1)}>
+                <Text style={styles.button}>Next</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
+      </View>
     </View>
   );
 }
@@ -76,12 +57,35 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
-    justifyContent: "center",
-    paddingBottom: 20,
+    /* justifyContent: "center", */
+    /* alignItems: "center", */
+    /* paddingBottom: 20,
+    paddingTop: 20, */
   },
-  camera: {
+  title: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  wrapper: {
     flex: 1,
-    borderRadius: 20,
+  },
+  form: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFFF",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    display: "flex",
+    alignItems: "center",
+  },
+  button: {
+    justifyContent: "center",
+    color: "white",
+    backgroundColor: "gray",
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    marginLeft: 20,
+    textAlign: "center",
   },
 });

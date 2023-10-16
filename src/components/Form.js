@@ -1,28 +1,26 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import SignUp from "./Signup";
+import ProductName from "./ProductName";
 import PersonalDetails from "./PersonalDetails";
 import CameraView from "./CameraView";
 
 export default function Form() {
   const [formData, setFormData] = useState({
-    //Signup
+    //Product Name
     name: "",
-    email: "",
-    password: "",
-    cpassword: "",
-    //Personal Detail
+    
+    //Product Quantity
     age: "age",
     designation: "",
     company: "",
   });
   const [screen, setScreen] = useState(0);
-  const FormTitle = ["Sign Up", "Personal Details"];
+  const FormTitle = ["Nome Prodotto", "Quantità"];
   const ScreenDisplay = () => {
     if (screen === 0) {
-      return <SignUp />;
+      return <ProductName formData={formData} setFormData={setFormData}/>;
     } else if (screen === 1) {
-      return <PersonalDetails />;
+      return <PersonalDetails formData={formData} setFormData={setFormData}/>;
     } else if (screen === 2) {
       return <CameraView />;
     }
@@ -51,6 +49,7 @@ const styles = StyleSheet.create({
   wrapper: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
   },
   buttonContainer: {
     flexDirection: "row",
