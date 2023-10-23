@@ -4,7 +4,6 @@ import Form from "./src/components/Form";
 import ProductName from "./src/components/ProductName";
 import PersonalDetails from "./src/components/PersonalDetails";
 import CameraView from "./src/components/CameraView";
-import StartPage from "./src/components/HomeScreen";
 
 export default function App() {
   const [formData, setFormData] = useState({

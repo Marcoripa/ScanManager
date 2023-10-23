@@ -1,39 +1,94 @@
-import React from 'react';
-import {  StyleSheet,
-  Button,
-  View,
-  Text,
-} from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import Form from "./Form";
+import ProductName from "./ProductName";
+import PersonalDetails from "./PersonalDetails";
+import CameraView from "./CameraView";
 
 
 
 export default function RegistrationScreen({ navigation }) {
+  const [formData, setFormData] = useState({
+    //Product Name
+    name: "",
+
+    //Product Quantity
+    age: "age",
+    designation: "",
+    company: "",
+  });
+  const [screen, setScreen] = useState(0);
+  const FormTitle = ["Nome Prodotto", "Quantità"];
+  const ScreenDisplay = () => {
+    if (screen === 0) {
+      return <ProductName formData={formData} setFormData={setFormData} />;
+    } else if (screen === 1) {
+      return <PersonalDetails formData={formData} setFormData={setFormData} />;
+    } 
+  };
+
   return (
-    <View style={styles.root}>
-      <Text>REGISTRAZIONE</Text>
+    
+    <View style={styles.container}>
+      <Text style={styles.title}>REGISTRA IL TUO PRODOTTO</Text>
+      <View style={styles.wrapper}>
+        <Text style={styles.title}>{FormTitle[screen]}</Text>
+        {screen === 2 ? (
+          <CameraView />
+        ) : (
+          <View style={styles.form}>
+            <View>{ScreenDisplay()}</View>
+            <View style={styles.buttonContainer}>
+              <Pressable
+                disabled={screen === 0}
+                onPress={() => setScreen(currScreen => currScreen - 1)}>
+                <Text style={styles.button}>Prev</Text>
+              </Pressable>
+              <Pressable
+                disabled={screen === 2}
+                onPress={() => setScreen(currScreen => currScreen + 1)}>
+                <Text style={styles.button}>Next</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
+      </View>
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'whitesmoke'
-  },
   container: {
     flex: 1,
-    justifyContent: "center",
-    marginHorizontal: 16,
+    /* justifyContent: "center", */
+    /* alignItems: "center", */
+    /* paddingBottom: 20,
+    paddingTop: 20, */
   },
   title: {
-    textAlign: "center",
-    marginVertical: 8,
+    display: "flex",
+    justifyContent: "center",
   },
-  fixToText: {
+  wrapper: {
+    flex: 1,
+  },
+  form: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFFF",
+  },
+  buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-  }
+    display: "flex",
+    alignItems: "center",
+  },
+  button: {
+    justifyContent: "center",
+    color: "white",
+    backgroundColor: "gray",
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    marginLeft: 20,
+    textAlign: "center",
+  },
 });
