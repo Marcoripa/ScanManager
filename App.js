@@ -1,56 +1,22 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import Form from "./src/components/Form";
-import ProductName from "./src/components/ProductName";
-import PersonalDetails from "./src/components/PersonalDetails";
-import CameraView from "./src/components/CameraView";
+import HomeScreen from "./src/components/HomeScreen";
+import ScanningScreen from "./src/components/ScanningScreen";
+import RegistrationScreen from "./src/components/RegistrationScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [formData, setFormData] = useState({
-    //Product Name
-    name: "",
-
-    //Product Quantity
-    age: "age",
-    designation: "",
-    company: "",
-  });
-  const [screen, setScreen] = useState(0);
-  const FormTitle = ["Nome Prodotto", "Quantità"];
-  const ScreenDisplay = () => {
-    if (screen === 0) {
-      return <ProductName formData={formData} setFormData={setFormData} />;
-    } else if (screen === 1) {
-      return <PersonalDetails formData={formData} setFormData={setFormData} />;
-    } 
-  };
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>REGISTRA IL TUO PRODOTTO</Text>
-      <View style={styles.wrapper}>
-        <Text style={styles.title}>{FormTitle[screen]}</Text>
-        {screen === 2 ? (
-          <CameraView />
-        ) : (
-          <View style={styles.form}>
-            <View>{ScreenDisplay()}</View>
-            <View style={styles.buttonContainer}>
-              <Pressable
-                disabled={screen === 0}
-                onPress={() => setScreen(currScreen => currScreen - 1)}>
-                <Text style={styles.button}>Prev</Text>
-              </Pressable>
-              <Pressable
-                disabled={screen === 2}
-                onPress={() => setScreen(currScreen => currScreen + 1)}>
-                <Text style={styles.button}>Next</Text>
-              </Pressable>
-            </View>
-          </View>
-        )}
-      </View>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Scanning" component={ScanningScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
