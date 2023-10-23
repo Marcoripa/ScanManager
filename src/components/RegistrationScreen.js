@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
-import Form from "./Form";
-import ProductName from "./ProductName";
-import PersonalDetails from "./PersonalDetails";
+import React, { useState } from "react";import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  View,
+  TextInput,
+} from "react-native";
+
 import CameraView from "./CameraView";
+import { Button } from "@rneui/themed";
 
-
-
-export default function RegistrationScreen({ navigation }) {
+export default function RegistrationScreen() {
   const [formData, setFormData] = useState({
     //Product Name
     name: "",
@@ -18,52 +22,85 @@ export default function RegistrationScreen({ navigation }) {
     company: "",
   });
   const [screen, setScreen] = useState(0);
-  const FormTitle = ["Nome Prodotto", "Quantità"];
-  const ScreenDisplay = () => {
-    if (screen === 0) {
-      return <ProductName formData={formData} setFormData={setFormData} />;
-    } else if (screen === 1) {
-      return <PersonalDetails formData={formData} setFormData={setFormData} />;
-    } 
-  };
 
   return (
-    
-    <View style={styles.container}>
-      <Text style={styles.title}>REGISTRA IL TUO PRODOTTO</Text>
-      <View style={styles.wrapper}>
-        <Text style={styles.title}>{FormTitle[screen]}</Text>
-        {screen === 2 ? (
-          <CameraView />
-        ) : (
-          <View style={styles.form}>
-            <View>{ScreenDisplay()}</View>
-            <View style={styles.buttonContainer}>
-              <Pressable
-                disabled={screen === 0}
-                onPress={() => setScreen(currScreen => currScreen - 1)}>
-                <Text style={styles.button}>Prev</Text>
-              </Pressable>
-              <Pressable
-                disabled={screen === 2}
-                onPress={() => setScreen(currScreen => currScreen + 1)}>
-                <Text style={styles.button}>Next</Text>
-              </Pressable>
-            </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.container}>
+          <View style={styles.wrapper}>
+            {screen === 1 ? (
+              <CameraView />
+            ) : (
+              <View style={styles.form}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholderTextColor="#003f5c"
+                  placeholder="Quantità"
+                  keyboardType="numeric"
+                  value={formData.quantity}
+                  onChangeText={quantity => {
+                    setFormData({ ...formData, quantity });
+                  }}
+                />
+                <TextInput
+                  style={styles.textInput}
+                  placeholderTextColor="#003f5c"
+                  placeholder="Nome prodotto"
+                  value={formData.name}
+                  onChangeText={name => {
+                    setFormData({ ...formData, name });
+                  }}
+                />
+                <View style={styles.buttonContainer}>
+                  <Button
+                    title="ACQUISISCI IMMAGINE"
+                    titleStyle={{ fontWeight: "200" }}
+                    onPress={() => setScreen(1)}
+                    buttonStyle={{
+                      backgroundColor: "rgba(199, 43, 98, 1)",
+                      borderColor: "transparent",
+                      borderWidth: 0,
+                    }}
+                    containerStyle={{
+                      width: 300,
+                      marginVertical: 10,
+                    }}
+                  />
+                  <Button
+                    title="INVIA SENZA IMMAGINE"
+                    titleStyle={{ fontWeight: "200" }}
+                    onPress={() => navigation.navigate("Scanning")}
+                    buttonStyle={{
+                      backgroundColor: "rgba(199, 43, 98, 1)",
+                      borderColor: "transparent",
+                      borderWidth: 0,
+                    }}
+                    containerStyle={{
+                      width: 300,
+                      marginVertical: 10,
+                    }}
+                  />
+                </View>
+              </View>
+            )}
           </View>
-        )}
-      </View>
-    </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    /* justifyContent: "center", */
-    /* alignItems: "center", */
-    /* paddingBottom: 20,
-    paddingTop: 20, */
+    paddingTop: StatusBar.currentHeight,
+  },
+  scrollView: {
+    backgroundColor: "pink",
+    marginHorizontal: 20,
+  },
+  text: {
+    fontSize: 42,
   },
   title: {
     display: "flex",
@@ -81,14 +118,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     display: "flex",
     alignItems: "center",
-  },
-  button: {
-    justifyContent: "center",
-    color: "white",
-    backgroundColor: "gray",
-    paddingVertical: 5,
-    paddingHorizontal: 30,
-    marginLeft: 20,
-    textAlign: "center",
   },
 });

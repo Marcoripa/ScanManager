@@ -1,9 +1,9 @@
 import React from 'react';
 import {  StyleSheet,
-  Button,
   View,
   Text,
 } from "react-native";
+import CameraView from "./CameraView";
 
 
 
@@ -11,6 +11,7 @@ export default function ScanningScreen({ navigation }) {
   return (
     <View style={styles.root}>
       <Text>LETTURA BARCODE</Text>
+      <CameraView />
     </View>
   );
 }
