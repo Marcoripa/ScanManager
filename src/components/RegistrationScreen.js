@@ -1,4 +1,5 @@
-import React, { useState } from "react";import {
+import React, { useState } from "react";
+import {
   StyleSheet,
   Text,
   SafeAreaView,
@@ -7,19 +8,21 @@ import React, { useState } from "react";import {
   View,
   TextInput,
 } from "react-native";
-
 import CameraView from "./CameraView";
 import { Button } from "@rneui/themed";
+import { Input } from "@rneui/themed";
 
 export default function RegistrationScreen() {
   const [formData, setFormData] = useState({
     //Product Name
     name: "",
-
     //Product Quantity
-    age: "age",
-    designation: "",
-    company: "",
+    quantity: 0,
+    //Product Dimension
+    dimension: "",
+    //Product Description
+    description: "",
+    
   });
   const [screen, setScreen] = useState(0);
 
@@ -35,7 +38,16 @@ export default function RegistrationScreen() {
                 <TextInput
                   style={styles.textInput}
                   placeholderTextColor="#003f5c"
-                  placeholder="Quantità"
+                  placeholder="NOME PRODOTTO"
+                  value={formData.name}
+                  onChangeText={name => {
+                    setFormData({ ...formData, name });
+                  }}
+                />
+                <TextInput
+                  style={styles.textInput}
+                  placeholderTextColor="#003f5c"
+                  placeholder="QUANTITA'"
                   keyboardType="numeric"
                   value={formData.quantity}
                   onChangeText={quantity => {
@@ -45,47 +57,57 @@ export default function RegistrationScreen() {
                 <TextInput
                   style={styles.textInput}
                   placeholderTextColor="#003f5c"
-                  placeholder="Nome prodotto"
-                  value={formData.name}
-                  onChangeText={name => {
-                    setFormData({ ...formData, name });
+                  placeholder="DIMENSIONI"
+                  keyboardType="numeric"
+                  value={formData.dimension}
+                  onChangeText={dimension => {
+                    setFormData({ ...formData, dimension });
                   }}
                 />
-                <View style={styles.buttonContainer}>
-                  <Button
-                    title="ACQUISISCI IMMAGINE"
-                    titleStyle={{ fontWeight: "200" }}
-                    onPress={() => setScreen(1)}
-                    buttonStyle={{
-                      backgroundColor: "rgba(199, 43, 98, 1)",
-                      borderColor: "transparent",
-                      borderWidth: 0,
-                    }}
-                    containerStyle={{
-                      width: 300,
-                      marginVertical: 10,
-                    }}
-                  />
-                  <Button
-                    title="INVIA SENZA IMMAGINE"
-                    titleStyle={{ fontWeight: "200" }}
-                    onPress={() => navigation.navigate("Scanning")}
-                    buttonStyle={{
-                      backgroundColor: "rgba(199, 43, 98, 1)",
-                      borderColor: "transparent",
-                      borderWidth: 0,
-                    }}
-                    containerStyle={{
-                      width: 300,
-                      marginVertical: 10,
-                    }}
-                  />
-                </View>
+                <TextInput
+                  style={styles.textInput}
+                  placeholderTextColor="#003f5c"
+                  placeholder="DESCRIZIONE"
+                  value={formData.description}
+                  onChangeText={description => {
+                    setFormData({ ...formData, description });
+                  }}
+                />
               </View>
             )}
           </View>
         </View>
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="ACQUISISCI IMMAGINE"
+          titleStyle={{ fontWeight: "200" }}
+          onPress={() => setScreen(1)}
+          buttonStyle={{
+            backgroundColor: "#14213d",
+            borderWidth: 0,
+          }}
+          containerStyle={{
+            width: "50%",
+            marginVertical: 10,
+            marginRight: 1,
+          }}
+        />
+        <Button
+          title="REGISTRA SENZA IMMAGINE"
+          titleStyle={{ fontWeight: "200" }}
+          onPress={() => navigation.navigate("Scanning")}
+          buttonStyle={{
+            backgroundColor: "#fca311",
+            borderWidth: 0,
+          }}
+          containerStyle={{
+            width: "50%",
+            marginVertical: 10,
+            marginLeft: 1,
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -96,27 +118,26 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
   },
   scrollView: {
-    backgroundColor: "pink",
-    marginHorizontal: 20,
-  },
-  text: {
-    fontSize: 42,
-  },
-  title: {
-    display: "flex",
-    justifyContent: "center",
+    backgroundColor: "#D3D3D3",
   },
   wrapper: {
     flex: 1,
   },
   form: {
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFFFF",
+    marginTop: 20,
+  },
+  textInput: {
+    width: "80%",
+    textAlign: "center",
+    fontSize: 32,
+    marginVertical: 30,
+    borderBottomColor: "#000", // Add this to specify bottom border color
+    borderBottomWidth: 2,
   },
   buttonContainer: {
+    backgroundColor: "#D3D3D3",
     flexDirection: "row",
     display: "flex",
-    alignItems: "center",
   },
 });

@@ -54,6 +54,8 @@ export default function HomeScreen({ navigation }) {
             backgroundColor: "rgb(200,200,200)",
             borderWidth: 0,
             borderRadius: 30,
+            borderTopColor: "rgb(200,200,200)",
+            borderBottomColor: "rgb(200,200,200)",
             width: 300,
             marginHorizontal: 50,
             marginVertical: 10,
