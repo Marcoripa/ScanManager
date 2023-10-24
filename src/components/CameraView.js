@@ -48,10 +48,11 @@ export default function CameraView() {
       }
     };
   
-    const saveImage = async () => {
+    const saveImage = async (uri) => {
       if (image) {
         try {
-          await MediaLibrary.createAssetAsync(image);
+          await MediaLibrary.saveToLibraryAsync(uri);
+          //await MediaLibrary.createAssetAsync(image);
           alert("Picture save!");
           setImage(null);
         } catch (e) {
@@ -126,7 +127,7 @@ export default function CameraView() {
                 icon="retweet"
                 onPress={() => setImage(null)}
               />
-              <Button title={"Save"} icon="check" onPress={saveImage} />
+              <Button title={"Salva"} icon="check" onPress={saveImage} />
             </View>
           ) : displayCameraView ? (
             <Button

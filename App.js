@@ -20,38 +20,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    /* justifyContent: "center", */
-    /* alignItems: "center", */
-    /* paddingBottom: 20,
-    paddingTop: 20, */
-  },
-  title: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  wrapper: {
-    flex: 1,
-  },
-  form: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFF",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    display: "flex",
-    alignItems: "center",
-  },
-  button: {
-    justifyContent: "center",
-    color: "white",
-    backgroundColor: "gray",
-    paddingVertical: 5,
-    paddingHorizontal: 30,
-    marginLeft: 20,
-    textAlign: "center",
-  },
-});
