@@ -23,6 +23,23 @@ export default function RegistrationScreen() {
   });
   const [screen, setScreen] = useState(0);
 
+  function saveForm() {
+    console.log("Saving data in archive")
+    console.log(formData)
+    fetch("http://localhost:3001/read_archive", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {screen === 1 ? (
@@ -73,26 +90,6 @@ export default function RegistrationScreen() {
                       setFormData({ ...formData, description });
                     }}
                   />
-                  <TextInput
-                    style={styles.textInput}
-                    placeholderTextColor="#003f5c"
-                    placeholder="DIMENSIONI"
-                    keyboardType="numeric"
-                    value={formData.dimension}
-                    onChangeText={dimension => {
-                      setFormData({ ...formData, dimension });
-                    }}
-                  />
-                  <TextInput
-                    style={styles.textInput}
-                    placeholderTextColor="#003f5c"
-                    placeholder="DESCRIZIONE"
-                    keyboardType="string"
-                    value={formData.description}
-                    onChangeText={description => {
-                      setFormData({ ...formData, description });
-                    }}
-                  />
                 </View>
               </View>
             </View>
@@ -116,7 +113,7 @@ export default function RegistrationScreen() {
             <Button
               title="REGISTRA SENZA IMMAGINE"
               titleStyle={{ fontWeight: "200" }}
-              onPress={() => navigation.navigate("Scanning")}
+              onPress={() => saveForm()}
               buttonStyle={{
                 backgroundColor: "#fca311",
                 borderWidth: 0,
