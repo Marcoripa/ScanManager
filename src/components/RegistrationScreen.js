@@ -1,6 +1,6 @@
-import React, { useState } from "react";import {
+import React, { useState } from "react";
+import {
   StyleSheet,
-  Text,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -9,7 +9,6 @@ import React, { useState } from "react";import {
 } from "react-native";
 import CameraView from "./CameraView";
 import { Button } from "@rneui/themed";
-import { Input } from "@rneui/themed";
 
 export default function RegistrationScreen() {
   const [formData, setFormData] = useState({
@@ -162,6 +161,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#D3D3D3",
     flexDirection: "row",
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });
