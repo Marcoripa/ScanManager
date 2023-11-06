@@ -20,18 +20,27 @@ export default function RegistrationScreen() {
     dimension: "",
     //Product Description
     description: "",
+    //Product Photo
+    //photo: "",
   });
   const [screen, setScreen] = useState(0);
 
   function saveForm() {
     console.log("Saving data in archive")
     console.log(formData)
-    fetch("http://localhost:3001/read_archive", {
-      method: "GET",
+    fetch("http://localhost:3001/save_item", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
+      body: JSON.stringify({
+        name: formData.name,
+        quantity: formData.quantity,
+        dimension: formData.dimension,
+        description: formData.description,
+        photo: formData.photo,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {

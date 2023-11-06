@@ -4,12 +4,24 @@ import { Button } from "@rneui/themed";
 import { SearchBar } from "@rneui/themed";
 
 export default function HomeScreen({ navigation }) {
-  const [search, setSearch] = useState("");
   const [value, setValue] = useState("");
 
-  const updateSearch = search => {
-    setSearch(search);
-  };
+  function searchItems(value) {
+    console.log("Searching for data in archive")
+    fetch(`http://127.0.0.1:3001/read_item?name=${value}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+      .then((response) => response.json())
+      .then(data => navigation.navigate("Searching", {
+        foundDataList: data,
+      }))
+      .catch((error) => console.error(error));
+  }
+
   return (
     <View style={styles.root}>
       <View>
@@ -70,6 +82,7 @@ export default function HomeScreen({ navigation }) {
           placeholder="CERCA UN PRODOTTO"
           placeholderTextColor="black"
           onCancel={() => console.log(onCancel())}
+          onSubmitEditing={() => searchItems(value)}
           value={value}
         />
       </View>
