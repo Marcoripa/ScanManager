@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { ListItem, Button } from "@rneui/themed";
+import { View, StyleSheet, Pressable, TextInput, Text } from "react-native";
+import {  Button } from "@rneui/themed";
 
-export default function FoundItem({foundData}) {
-  console.log(foundData)
+export default function FoundItem({ foundData }) {
   const [loading, setLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -12,7 +11,7 @@ export default function FoundItem({foundData}) {
   function incrementCount() {
     count = parseInt(count) + 1;
     setCount(count);
-    console.log(count)
+    console.log(count);
   }
   function decrementCount() {
     count = count - 1;
@@ -45,46 +44,53 @@ export default function FoundItem({foundData}) {
   }
 
   return (
-    <ListItem.Content style={styles.container}>
-      <View>
-        <ListItem.Title>{foundData.Id_Product}</ListItem.Title>
-        <ListItem.Subtitle style={{ fontWeight: "bold" }}>
-          {foundData.Name}
-        </ListItem.Subtitle>
-      </View>
-      <View style={styles.container}>
-        <Button
-          title="+"
-          type="outline"
-          onPress={() => incrementCount()}
-        />
-        <ListItem.Input
-          style={styles.numberInput}
-          placeholder={foundData.Quantity}
-          value={count}
-          onChange={(e) => setCount(e.target.value)}
-          keyboardType='numeric'
-        />
-        <Button title="-" type="outline" onPress={() => decrementCount()} />
-        {loading ? (
-          <Button
-            title="Solid"
-            type="solid"
-            style={{ marginLeft: 5 }}
-            loading
+    <View>
+      <View  style={styles.container}>
+        <View>
+          <Text>{foundData.Id_Product}</Text>
+          <Text style={{ fontWeight: "bold" }}>
+            {foundData.Name}
+          </Text>
+        </View>
+        <View style={styles.container}>
+          <Button title="+" type="outline" onPress={() => incrementCount()} />
+          <TextInput
+            style={styles.numberInput}
+            placeholder={foundData.Quantity}
+            value={count}
+            onChange={e => setCount(e.target.value)}
+            keyboardType="numeric"
           />
-        ) : (
-          <Button
-            radius={"sm"}
-            type="solid"
-            style={{ marginLeft: 5 }}
-            onPress={() => updateItem(foundData.Id_Product, count)}>
-            Update
-          </Button>
-        )}
-        {updated ? <h6>Updated</h6> : <></>}
+          <Button title="-" type="outline" onPress={() => decrementCount()} />
+          {loading ? (
+            <Button
+              title="Solid"
+              type="solid"
+              style={{ marginLeft: 5 }}
+              loading
+            />
+          ) : (
+            <Button
+              radius={"sm"}
+              type="solid"
+              style={{ marginLeft: 5 }}
+              onPress={() => updateItem(foundData.Id_Product, count)}>
+              Update
+            </Button>
+          )}
+          {updated ? <h6>Updated</h6> : <></>}
+        </View>
+        <Pressable style={styles.accordionSwitch}
+          onPress={() => {
+            setExpanded(!expanded);
+          }}>
+          {expanded ? "-" : "+"}
+        </Pressable>
       </View>
-    </ListItem.Content>
+      <View style={[expanded ? styles.accordionOpen : styles.accordionClosed]}>
+        CONTENT
+      </View>
+    </View>
   );
 }
 
@@ -93,9 +99,21 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center"
   },
   numberInput: {
     width: 40,
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
+  accordionSwitch: {
+fontSize: 24,
+fontWeight: 700,
+marginHorizontal: 10
+  },
+  accordionOpen: {
+    display: "block",
+  },
+  accordionClosed: {
+    display: "none",
+  },
 });
