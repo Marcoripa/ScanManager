@@ -1,32 +1,45 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Switch, TextInput } from "react-native";
 import { Button } from "@rneui/themed";
-import { SearchBar } from "@rneui/themed";
 
 export default function HomeScreen({ navigation }) {
   const [value, setValue] = useState("");
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  function searchItems(value) {
-    console.log("Searching for data in archive")
-    fetch(`http://127.0.0.1:3001/read_item?name=${value}`, {
+  function searchItems(valueToSearch) {
+    let param = ""
+    let route = ""
+    if (isEnabled) {
+      param = "id_product";
+      route = "Reading";
+    } else {
+      param = "name";
+      route = "Searching";
+    }
+    let url = `http://127.0.0.1:3001/read_item?${param}=${valueToSearch}`;
+    console.log("Searching for data in archive");
+    fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
     })
-      .then((response) => response.json())
-      .then(data => navigation.navigate("Searching", {
-        foundDataList: data,
-      }))
-      .catch((error) => console.error(error));
+      .then(response => response.json())
+      .then(data =>
+        navigation.navigate(route, {
+          foundDataList: data,
+        })
+      )
+      .catch(error => console.error(error));
   }
 
   return (
     <View style={styles.root}>
       <View>
         <Button
-          title="REGISTRA UN NUOVO PRODOTTO"
+          title="REGISTER A NEW PRODUCT"
           titleStyle={{ fontWeight: "200" }}
           onPress={() => navigation.navigate("Registration")}
           buttonStyle={{
@@ -41,49 +54,25 @@ export default function HomeScreen({ navigation }) {
           }}
         />
       </View>
-      <View>
-        <Button
-          title="LEGGI UN PRODOTTO ESISTENTE"
-          titleStyle={{ fontWeight: "200" }}
-          onPress={() => navigation.navigate("Scanning")}
-          buttonStyle={{
-            backgroundColor: "rgba(199, 43, 98, 1)",
-            borderColor: "transparent",
-            borderWidth: 0,
-            borderRadius: 30,
-          }}
-          containerStyle={{
-            width: 300,
-            marginHorizontal: 50,
-            marginVertical: 10,
-          }}
+      <View style={styles.inputContainer}>
+        <View style={styles.toggleContainer}>
+          <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
         />
-      </View>
-      <View>
-        <SearchBar
-          platform="default"
-          containerStyle={{
-            backgroundColor: "rgb(200,200,200)",
-            borderWidth: 0,
-            borderRadius: 30,
-            borderTopColor: "rgb(200,200,200)",
-            borderBottomColor: "rgb(200,200,200)",
-            width: 300,
-            marginHorizontal: 50,
-            marginVertical: 10,
-          }}
-          inputContainerStyle={{
-            backgroundColor: "rgb(200,200,200)",
-          }}
-          inputStyle={{
-          }}
+        </View>
+        <TextInput
+          style={styles.input}
           onChangeText={newVal => setValue(newVal)}
           onClearText={() => console.log(onClearText())}
-          placeholder="CERCA UN PRODOTTO"
-          placeholderTextColor="black"
           onCancel={() => console.log(onCancel())}
           onSubmitEditing={() => searchItems(value)}
           value={value}
+          placeholder="SEARCH FOR A PRODUCT"
+          keyboardType="string"
         />
       </View>
     </View>
@@ -97,15 +86,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "whitesmoke",
   },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    marginHorizontal: 16,
-  },
-  searchbar: {
-    backgroundColor: "rgba(199, 43, 98, 1)",
-    borderColor: "transparent",
-    borderWidth: 0,
+  inputContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: 300,
+    height: 50,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
     borderRadius: 30,
+    backgroundColor: "lightgray",
+  },
+  toggleContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  input: {
+    marginLeft: 20,
+    fontSize: 16,
   },
 });

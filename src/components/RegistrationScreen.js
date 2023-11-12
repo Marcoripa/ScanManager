@@ -39,7 +39,7 @@ export default function RegistrationScreen() {
         quantity: formData.quantity,
         dimension: formData.dimension,
         description: formData.description,
-        photo: formData.photo,
+        photo: "no photo available",
       }),
     })
       .then((response) => response.json())
@@ -52,7 +52,7 @@ export default function RegistrationScreen() {
   return (
     <SafeAreaView style={styles.container}>
       {screen === 1 ? (
-        <CameraView />
+        <CameraView formData={formData}/>
       ) : (
         <>
           <ScrollView style={styles.scrollView}>

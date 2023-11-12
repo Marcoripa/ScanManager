@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { ListItem, Button } from "@rneui/themed";
 
 export default function FoundItem({foundData}) {
+  console.log(foundData)
   const [loading, setLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [expanded, setExpanded] = useState(false);

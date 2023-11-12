@@ -1,15 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import Button from "./Button";
 
-export default function CameraView() {
+export default function CameraView({formData}) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [displayCameraView, setDisplayCameraView] = useState(false);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
+
+  console.log('FORM DATA')
+  console.log(formData)
 
   /* useEffect(() => {
       (async () => {
@@ -44,11 +48,33 @@ export default function CameraView() {
     //delete link;
   }
 
+  function saveForm() {
+    console.log("Saving image in archive")
+    fetch("http://localhost:3001/save_item", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        quantity: formData.quantity,
+        dimension: formData.dimension,
+        description: formData.description,
+        photo: image,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.error(error));
+  }
+
   const takePicture = async () => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        console.log(data);
         setImage(data.uri);
       } catch (e) {
         console.error(e);
@@ -60,7 +86,8 @@ export default function CameraView() {
     if (image) {
       try {
         //await MediaLibrary.createAssetAsync(image);
-        downloadURI(image, "test.png")
+        /* downloadURI(image, "test.png") */
+        saveForm()
         alert("Picture save!");
         setImage(null);
       } catch (e) {

@@ -1,6 +1,7 @@
 import React from "react";
 import HomeScreen from "./src/components/HomeScreen";
 import ScanningScreen from "./src/components/ScanningScreen";
+import ReadingScreen from "./src/components/ReadingScreen";
 import RegistrationScreen from "./src/components/RegistrationScreen";
 import SearchingScreen from "./src/components/SearchingScreen";
 import { NavigationContainer } from "@react-navigation/native";
@@ -15,6 +16,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
         <Stack.Screen name="Scanning" component={ScanningScreen} />
+        <Stack.Screen name="Reading" component={ReadingScreen} />
         <Stack.Screen name="Searching" component={SearchingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
