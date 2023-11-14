@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import {
+import React, { useState } from "react";import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
   StatusBar,
   View,
   TextInput,
+  Text,
+  Modal,
+  Pressable,
 } from "react-native";
 import CameraView from "./CameraView";
 import { Button } from "@rneui/themed";
 
 export default function RegistrationScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
   const [formData, setFormData] = useState({
     //Product Name
     name: "",
@@ -26,8 +29,7 @@ export default function RegistrationScreen() {
   const [screen, setScreen] = useState(0);
 
   function saveForm() {
-    console.log("Saving data in archive")
-    console.log(formData)
+    console.log("Saving data in archive");
     fetch("http://localhost:3001/save_item", {
       method: "POST",
       headers: {
@@ -39,20 +41,40 @@ export default function RegistrationScreen() {
         quantity: formData.quantity,
         dimension: formData.dimension,
         description: formData.description,
-        photo: "no photo available",
+        photo: "",
       }),
     })
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         console.log(data);
+        setModalVisible(true)
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   }
 
   return (
     <SafeAreaView style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Item saved!</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => navigation.navigate("Home")}>
+              <Text style={styles.textStyle}>Return to Home</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       {screen === 1 ? (
-        <CameraView formData={formData}/>
+        <CameraView formData={formData} />
       ) : (
         <>
           <ScrollView style={styles.scrollView}>
@@ -168,5 +190,46 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     display: "flex",
     justifyContent: "center",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
