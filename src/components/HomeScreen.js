@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Switch, TextInput } from "react-native";
+import React, { useState } from "react";import { StyleSheet, View, TextInput } from "react-native";
 import { Button } from "@rneui/themed";
+import { Switch } from "react-native-switch";
 
 export default function HomeScreen({ navigation }) {
   const [value, setValue] = useState("");
@@ -8,8 +8,8 @@ export default function HomeScreen({ navigation }) {
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   function searchItems(valueToSearch) {
-    let param = ""
-    let route = ""
+    let param = "";
+    let route = "";
     if (isEnabled) {
       param = "id_product";
       route = "Reading";
@@ -56,13 +56,24 @@ export default function HomeScreen({ navigation }) {
       </View>
       <View style={styles.inputContainer}>
         <View style={styles.toggleContainer}>
-          <Switch
+          {/* <Switch
           trackColor={{ false: "#767577", true: "#81b0ff" }}
           thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
           onValueChange={toggleSwitch}
           value={isEnabled}
-        />
+        /> */}
+          <Switch
+            value={isEnabled}
+            onValueChange={toggleSwitch}
+            disabled={false}
+            activeText={"ID"}
+            inActiveText={""}
+            backgroundActive={"#003566"}
+            backgroundInactive={"#a7c957"}
+            circleActiveColor={"#001d3d"}
+            circleInActiveColor={"#6a994e"}
+          />
         </View>
         <TextInput
           style={styles.input}

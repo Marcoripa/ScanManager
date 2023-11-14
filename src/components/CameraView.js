@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Modal, Pressable } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import Button from "./Button";
 
-export default function CameraView({formData}) {
+export default function CameraView({ formData }) {
+  const [modalVisible, setModalVisible] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [displayCameraView, setDisplayCameraView] = useState(false);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
-
-  console.log('FORM DATA')
-  console.log(formData)
 
   /* useEffect(() => {
       (async () => {
@@ -38,18 +36,8 @@ export default function CameraView({formData}) {
     }
   };
 
-  function downloadURI(uri, name) {
-    var link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    //delete link;
-  }
-
   function saveForm() {
-    console.log("Saving image in archive")
+    console.log("Saving data with image in archive");
     fetch("http://localhost:3001/save_item", {
       method: "POST",
       headers: {
@@ -64,11 +52,11 @@ export default function CameraView({formData}) {
         photo: image,
       }),
     })
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         console.log(data);
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   }
 
   const takePicture = async () => {
@@ -85,10 +73,8 @@ export default function CameraView({formData}) {
   const saveImage = async () => {
     if (image) {
       try {
-        //await MediaLibrary.createAssetAsync(image);
-        /* downloadURI(image, "test.png") */
-        saveForm()
-        alert("Picture save!");
+        saveForm();
+        setModalVisible(true);
         setImage(null);
       } catch (e) {
         console.error(e);
@@ -102,6 +88,26 @@ export default function CameraView({formData}) {
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Item saved!</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => navigation.navigate("Home")}>
+              <Text style={styles.textStyle}>Return to Home</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
       {!image ? (
         displayCameraView ? (
           <Camera
@@ -192,5 +198,46 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
     borderRadius: 20,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });

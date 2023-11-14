@@ -1,4 +1,5 @@
 import React from "react";
+import TestScreen from "./src/components/TestPage";
 import HomeScreen from "./src/components/HomeScreen";
 import ScanningScreen from "./src/components/ScanningScreen";
 import ReadingScreen from "./src/components/ReadingScreen";
@@ -13,6 +14,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* <Stack.Screen name="Home" component={TestScreen} /> */}
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
         <Stack.Screen name="Scanning" component={ScanningScreen} />
